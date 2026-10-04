@@ -3,7 +3,7 @@ import { defineConfig } from 'wxt';
 export default defineConfig({
   manifest: {
     name: 'ChatGPT Notifier',
-    version: '1.5.0',
+    version: '1.6.4',
     description: 'A Chrome extension that notifies you when ChatGPT has finished processing your request.',
     permissions: ['storage', 'notifications'],
     icons: {

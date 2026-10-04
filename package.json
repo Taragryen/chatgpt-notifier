@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-notifier",
-  "version": "1.5.0",
+  "version": "1.6.4",
   "private": true,
   "packageManager": "pnpm@11.5.0",
   "scripts": {

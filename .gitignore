@@ -2,3 +2,11 @@
 node_modules/
 .output/
 .wxt/
+
+# TransferLoop local metadata and export artifacts
+.aiignore
+.aimemory
+PROJECT_MAP.json
+.ai-response.json
+*_AI_INSTRUCTIONS.md
+*_TL-*.zip

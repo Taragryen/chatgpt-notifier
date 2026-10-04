@@ -21,35 +21,49 @@ This is a **WXT**-based Chrome extension (Manifest V3). The framework provides `
 
 | Entrypoint | What it does |
 |---|---|
-| `entrypoints/background.ts` | Service worker. Listens for `CHATGPT_REPLY_DONE` message from content script, creates system notification if the user enabled it. |
-| `entrypoints/content.ts` | Injected into `chatgpt.com`. Watches DOM for streaming indicators, plays audio when ChatGPT finishes, sends message to background. |
-| `entrypoints/popup/` | Extension popup (260px wide card). Volume slider + system notification toggle. Settings persisted via `chrome.storage.local`. |
+| `entrypoints/background.ts` | Service worker. Listens for `CHATGPT_REPLY_DONE` from the content script and creates a system notification when enabled. |
+| `entrypoints/content.ts` | Injected into `chatgpt.com`. Tracks logical response cycles across thinking/generation phases, plays the selected sound once completion is confirmed, and notifies the background worker. |
+| `entrypoints/popup/` | Extension popup. Sound selection, custom audio, volume, and system-notification settings persisted via `chrome.storage.local`. |
 
-### Shared State (chrome.storage.local keys)
+### Shared State (`chrome.storage.local` keys)
 
-- `chatgpt_notifier_volume` — `number` (0–1), read by content script, written by popup
-- `chatgpt_notifier_system_notification_enabled` — `boolean`, read by background, written by popup
+- `chatgpt_notifier_volume` — `number` (0–1)
+- `chatgpt_notifier_system_notification_enabled` — `boolean`
+- `chatgpt_notifier_sound_id` — selected built-in/custom sound ID
+- `chatgpt_notifier_sound_collapsed` — sound-picker collapse state
+- `chatgpt_notifier_custom_sound_data_url` — custom sound data URL
+- `chatgpt_notifier_custom_sound_name` — custom sound filename
 
-The content script creates an `Audio` object once and updates `audio.volume` reactively via `chrome.storage.onChanged` — no re-creation on volume change.
+### Detection Logic (`entrypoints/content.ts`)
 
-### Detection Logic (content script)
+The content script watches ChatGPT's DOM with a `MutationObserver` plus a 500 ms polling fallback.
 
-Uses a `MutationObserver` on `document.body` (childList, subtree, attributes) to watch for "streaming" DOM nodes. Each mutation fires a `queueMicrotask`-debounced check against a CSS selector list:
+Generation signals include legacy streaming state, Stop buttons, and busy assistant messages. The assistant response spinner is classified separately as **activity-only**, so thinking/tool transitions do not count as terminal completion.
 
-- `.result-streaming` — legacy reply container
-- `button[data-testid$="stop-button"]` — stop-generating button
-- `[data-testid="assistant-response-spinner"]` — new spinner
+Each logical response has one response-cycle ID. When active generation/activity signals disappear:
 
-When streaming stops, a 300ms debounce timer fires, then re-checks selectors before playing audio and messaging the background. If new streaming starts before the timer fires, it's cancelled.
+1. wait 750 ms and re-check for resumed activity;
+2. confirm completion from the current/new assistant response's completed-response controls (primarily Copy-response actions);
+3. keep the same response cycle open across temporary thinking/tool gaps;
+4. allow only one notification per cycle;
+5. use a 30-second quiet fallback only when generation was observed but ChatGPT's completion markup cannot be found.
+
+The assistant-turn selectors support both classic conversation-turn markup and the newer grouped `data-turn-key` renderer.
+
+### Audio
+
+Built-in synthesized sounds are defined in `lib/sounds.ts`. The bundled fallback sound is `public/notification.mp3`.
+
+Custom sounds are stored as data URLs, decoded into a cached `AudioBuffer`, and played through Web Audio. If custom playback fails, the bundled default sound is attempted as a fallback.
 
 ### WXT Config
 
-`wxt.config.ts` defines the manifest: permissions (`storage`, `notifications`), icon, and `web_accessible_resources` for `notification.mp3` (needed by content script's `chrome.runtime.getURL()`).
+`wxt.config.ts` defines the manifest: permissions (`storage`, `notifications`), icon, and `web_accessible_resources` for `notification.mp3`.
 
 ### Static Assets
 
 - `public/logo.png` — extension icon (128px)
-- `public/notification.mp3` — notification sound, played by content script
+- `public/notification.mp3` — bundled notification sound
 - `assets/demo.png` — README screenshot (not shipped in the extension)
 
 ## Branch Strategy

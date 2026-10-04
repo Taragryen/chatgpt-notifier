@@ -17,7 +17,22 @@
       <span>Sound</span>
       <span class="chevron" id="soundChevron"></span>
     </button>
-    <div class="sound-list" id="soundList"></div>
+    <div class="sound-options" id="soundOptions">
+      <div class="sound-list" id="soundList"></div>
+      <div class="custom-sound-controls" id="customSoundControls">
+        <input type="file" id="customSoundInput" accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.flac,.webm" hidden>
+        <button class="secondary-button" id="chooseCustomSound" type="button">Choose Sound File</button>
+        <div class="custom-sound-hint" id="customSoundHint">MP3, WAV, OGG, and other browser-playable audio · up to 5 MB</div>
+        <div class="custom-sound-meta" id="customSoundMeta" hidden>
+          <span class="custom-sound-name" id="customSoundName"></span>
+          <div class="custom-sound-actions">
+            <button class="text-button" id="previewCustomSound" type="button">Preview</button>
+            <button class="text-button" id="resetCustomSound" type="button">Remove</button>
+          </div>
+        </div>
+        <div class="custom-sound-status" id="customSoundStatus" aria-live="polite"></div>
+      </div>
+    </div>
     <div class="toggle-row">
       <label for="systemNotifyToggle">System Notification</label>
       <label class="switch">

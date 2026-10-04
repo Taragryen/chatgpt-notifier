@@ -3,7 +3,8 @@
 A Chrome extension that notifies you when ChatGPT finishes responding.
 
 **Features:**
-- 🎵 9 notification sounds to choose from (Tri-tone, Glass, Pop, Knock, and more)
+- 🎵 9 built-in notification sounds to choose from (Tri-tone, Glass, Pop, Knock, and more)
+- 📁 Custom notification sound support for local audio files up to 5 MB
 - 🔊 Adjustable volume with live preview
 - 🔔 Optional system notification
 - 🎛️ Collapsible sound picker

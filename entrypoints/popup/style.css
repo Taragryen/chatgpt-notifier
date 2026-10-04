@@ -256,3 +256,147 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: #d1d5db;
   border-radius: 2px;
 }
+
+.custom-sound-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.custom-sound-controls.collapsed {
+  display: none;
+}
+
+.secondary-button {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d7d7de;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #343541;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.secondary-button:hover {
+  border-color: #a9a9b5;
+  background: #f9f9fb;
+}
+
+.custom-sound-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.custom-sound-name {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: #6e6e80;
+}
+
+.text-button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #6e6e80;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.text-button:hover:not(:disabled) {
+  color: #343541;
+}
+
+.text-button:disabled {
+  color: #c5c5cc;
+  cursor: default;
+}
+
+.custom-sound-status {
+  min-height: 14px;
+  font-size: 11px;
+  line-height: 1.25;
+  color: #6e6e80;
+}
+
+.custom-sound-status.error {
+  color: #b42318;
+}
+
+/* Sound options share one scroll area so Custom behaves like a first-class sound choice. */
+.sound-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.sound-options.collapsed {
+  display: none;
+}
+
+.sound-list {
+  max-height: none;
+  overflow: visible;
+  padding-right: 0;
+}
+
+.sound-list.collapsed {
+  display: flex;
+}
+
+.sound-options::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sound-options::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.custom-sound-controls {
+  display: none;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0 2px 2px 30px;
+  padding: 4px 0 2px;
+}
+
+.custom-sound-controls.visible {
+  display: flex;
+}
+
+.custom-sound-controls.collapsed {
+  display: none;
+}
+
+.custom-sound-hint {
+  font-size: 10px;
+  line-height: 1.35;
+  color: #8a8f98;
+}
+
+.custom-sound-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.custom-sound-meta[hidden] {
+  display: none;
+}
+

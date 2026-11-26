@@ -63,6 +63,17 @@ export default defineContentScript({
       '.result-streaming',
       'button[data-testid$="stop-button"]',
       '[data-testid="assistant-response-spinner"]',
+      // 2026-11 logged-in UI. Both last through thinking and tool phases and
+      // clear when the reply completes or is cancelled. markdown-animated is
+      // there from send; in_progress starts a few seconds later but does not
+      // depend on animation. Keep both.
+      '[data-talvt-turn-state="in_progress"]',
+      '[data-markdown-animated]',
+      // 2026-11 logged-out UI
+      '[data-message-streaming]',
+      // Do not match the new UI's button[aria-label="Stop"]: a hidden composer
+      // keeps a stale one, and a selector that never clears silences every
+      // notification.
     ].join(',');
 
     let isStreaming = false;
@@ -102,7 +113,15 @@ export default defineContentScript({
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['class', 'data-testid', 'aria-busy'],
+      // Must include every attribute STREAM_SELECTORS matches on.
+      attributeFilter: [
+        'class',
+        'data-testid',
+        'aria-busy',
+        'data-talvt-turn-state',
+        'data-markdown-animated',
+        'data-message-streaming',
+      ],
     });
 
     checkStreaming();

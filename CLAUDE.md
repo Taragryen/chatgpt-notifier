@@ -39,6 +39,10 @@ Uses a `MutationObserver` on `document.body` (childList, subtree, attributes) to
 - `.result-streaming` — legacy reply container
 - `button[data-testid$="stop-button"]` — stop-generating button
 - `[data-testid="assistant-response-spinner"]` — new spinner
+- `[data-talvt-turn-state="in_progress"]`, `[data-markdown-animated]` — logged-in UI as of 2026-11
+- `[data-message-streaming]` — logged-out UI as of 2026-11
+
+The list is an OR: a selector that never clears blocks every notification, so only add signals that disappear when the reply ends. The new UI's `button[aria-label="Stop"]` does not qualify (a hidden composer keeps a stale one). Attributes used here must also be in the observer's `attributeFilter`.
 
 When streaming stops, a 300ms debounce timer fires, then re-checks selectors before playing audio and messaging the background. If new streaming starts before the timer fires, it's cancelled.
 
